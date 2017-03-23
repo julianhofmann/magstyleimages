@@ -1,0 +1,16 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:ce="http://typo3.org/ns/TYPO3/CMS/FluidStyledContent/ViewHelpers" data-namespace-typo3-fluid="true">
+<div class="ce-gallery msi-blockwrap{f:if(condition: data.imageborder, then: ' ce-border')}" data-ce-images="{imagesBlock.count.files}" style="width: {imagesBlock.width}px;">
+	<f:if condition="{imagesBlock.position.horizontal} == 'center'">
+		<f:then>
+			<div class="ce-outer">
+				<div class="ce-inner">
+					<f:render partial="Images/MagStyleImages/{imagesBlock.profile}" arguments="{imagesBlock: imagesBlock, data:data, settings:settings}"/>
+				</div>
+			</div>
+		</f:then>
+		<f:else>
+			<f:render partial="Images/MagStyleImages/{imagesBlock.profile}" arguments="{imagesBlock: imagesBlock, data:data, settings:settings}"/>
+		</f:else>
+	</f:if>
+</div>
+</html>

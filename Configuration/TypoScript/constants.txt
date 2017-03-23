@@ -1,0 +1,26 @@
+#cat=plugin.tx_magstyleimages/enable/1; type=int+; label= Maximum width: Define the  utmost width of the imageblock
+plugin.tx_magstyleimages.maxW = 600
+
+#cat=plugin.tx_magstyleimages/enable/2; type=color; label= Background color: Define background color of imageblock
+plugin.tx_magstyleimages.blockbgcolor = #ffffff
+
+#cat=plugin.tx_magstyleimages/enable/3; type=int+; label= Padding: Define the padding between the images
+plugin.tx_magstyleimages.imgpadding = 2
+
+#cat=plugin.tx_magstyleimages/enable/4; type=int+; label= Border: Define the border-width of the images
+plugin.tx_magstyleimages.imgborderwidth = 1
+
+#cat=plugin.tx_magstyleimages/enable/5; type=options[,dotted, dashed, solid, double, groove, ridge, inset, outset]; label= Image borderstyle: Choose the default border style around the images
+plugin.tx_magstyleimages.imgborderstyle = solid
+
+#cat=plugin.tx_magstyleimages/enable/6; type=color; label= Border color: Define the border-color for the images
+plugin.tx_magstyleimages.imgbordercolor = #eeeeee
+
+#cat=plugin.tx_magstyleimages/enable/7; type=int+; label= Block border-width: Define the border-width of the magazine block
+plugin.tx_magstyleimages.blockborderwidth = 1
+
+#cat=plugin.tx_magstyleimages/enable/8; type=options[,dotted, dashed, solid, double, groove, ridge, inset, outset]; label= Block border-style: Choose the default border style around the magazine block
+plugin.tx_magstyleimages.blockborderstyle = solid
+
+#cat=plugin.tx_magstyleimages/enable/9; type=color; label= Border color: Define the border-color for magazine block
+plugin.tx_magstyleimages.blockbordercolor = #eeeeee

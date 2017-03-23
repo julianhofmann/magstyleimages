@@ -1,0 +1,36 @@
+tt_content {
+	magstyleimages_images =< tt_content.textpic
+	magstyleimages_images {
+		templateName = MagStyleImages
+		dataProcessing {
+			10 = TYPO3\CMS\Frontend\DataProcessing\FilesProcessor
+			10 {
+				references.fieldName = image
+			}
+			20 = Webenergy\Magstyleimages\DataProcessing\MagazineStyleImagesProcessor
+			20 {
+				borderEnabled = 0
+				// No CSS will be added, only calculation of dimensions will consider the border width
+				borderWidth = 0
+				// No CSS will be added, only calculation of dimensions will consider the padding
+				borderPadding = 0
+			}
+		}
+	}
+}
+/*
+page.cssInline.234 = TEXT
+page.cssInline.234.value (
+	.msi-blockwrap img { margin: 2px; }
+	.msi-blockwrap img { border: solid 1px #f00; }
+)
+*/
+lib.fluidContent {
+	templateRootPaths {
+		234 = EXT:magstyleimages/Resources/Private/Templates/
+	}
+
+	partialRootPaths {
+		234 = EXT:magstyleimages/Resources/Private/Partials/
+	}
+}
