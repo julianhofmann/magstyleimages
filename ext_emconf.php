@@ -4,7 +4,7 @@ $EM_CONF['magstyleimages'] = [
     'description' => 'Implements a new content element "Magazine Images" with very nice looking automatic image layouts for up to eight images.',
     'category' => 'fe',
     'shy' => 0,
-    'version' => '0.1.0',
+    'version' => '0.1.1',
     'dependencies' => '',
     'conflicts' => '',
     'priority' => '',
@@ -23,10 +23,13 @@ $EM_CONF['magstyleimages'] = [
     'CGLcompliance_note' => '',
     'constraints' => [
         'depends' => [
-            'typo3' => '8.6.0-8.6.99',
-            'fluid_styled_content' => '8.6.0-8.6.99'
+            'typo3' => '8.6.0-8.7.99',
+            'fluid_styled_content' => '8.6.0-8.7.99'
         ],
         'conflicts' => [],
         'suggests' => [],
     ],
+    'autoload' => [
+            'psr-4' => ['Webenergy\\Magstyleimages\\' => 'Classes']
+        ]
 ];
