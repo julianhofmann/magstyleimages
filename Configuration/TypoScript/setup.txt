@@ -14,6 +14,9 @@ tt_content {
 				borderWidth = 0
 				// No CSS will be added, only calculation of dimensions will consider the padding
 				borderPadding = 0
+
+				maxImagesBlockWidth = {$styles.content.textmedia.maxW}
+				maxImagesBlockWidthInText = {$styles.content.textmedia.maxWInText}
 			}
 		}
 	}
@@ -27,10 +30,19 @@ page.cssInline.234.value (
 */
 lib.fluidContent {
 	templateRootPaths {
-		234 = EXT:magstyleimages/Resources/Private/Templates/
+		23 = EXT:magstyleimages/Resources/Private/Templates/
 	}
 
 	partialRootPaths {
-		234 = EXT:magstyleimages/Resources/Private/Partials/
+		23 = EXT:magstyleimages/Resources/Private/Partials/
+	}
+}
+lib.contentElement {
+	templateRootPaths {
+		23 = EXT:magstyleimages/Resources/Private/Templates/
+	}
+
+	partialRootPaths {
+		23 = EXT:magstyleimages/Resources/Private/Partials/
 	}
 }
