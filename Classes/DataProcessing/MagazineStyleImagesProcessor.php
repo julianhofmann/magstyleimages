@@ -232,6 +232,12 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
     private function transpose($fileObjects)
     {
         $newarr = [];
+
+        // Currently this extension supports only up to 8 images in a block
+        if (count($fileObjects) > 8) {
+            $fileObjects = array_slice($fileObjects, 0, 8);
+        }
+
         foreach ($fileObjects as $i => $fileObject) {
             if ($fileObject->hasProperty('width') === false || $fileObject->hasProperty('height') === false) {
                 throw new ContentRenderingException($fileObject->getIdentifier() . ' has either no height or no width', 1487544368);
