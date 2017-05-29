@@ -23,6 +23,6 @@ $EM_CONF['magstyleimages'] = [
         'suggests' => [],
     ],
     'autoload' => [
-            'psr-4' => ['Webenergy\\Magstyleimages\\' => 'Classes']
-        ]
+        'psr-4' => ['Webenergy\\Magstyleimages\\' => 'Classes']
+    ]
 ];
