@@ -28,12 +28,11 @@ namespace Webenergy\Magstyleimages\DataProcessing;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
-use TYPO3\CMS\Frontend\ContentObject\Exception\ContentRenderingException;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
+use TYPO3\CMS\Frontend\ContentObject\Exception\ContentRenderingException;
 
 /**
  * Class MagazineStyleImagesProcessor
- * @package Webenergy\Magstyleimges\DataProcessing
  */
 class MagazineStyleImagesProcessor implements DataProcessorInterface
 {
@@ -258,8 +257,6 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      *
      * Images block has a horizontal and a vertical position towards the text
      * and a possible wrapping of the text around the images block.
-     *
-     * @return void
      */
     protected function determineImagesBlockPosition()
     {
@@ -278,8 +275,6 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
 
     /**
      * Get the images block width based on vertical position
-     *
-     * @return void
      */
     protected function determineMaximumImagesBlockWidth()
     {
@@ -326,8 +321,6 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * Prepare the gallery data
      *
      * Make an array for rows, columns and configuration
-     *
-     * @return void
      */
     protected function prepareImagesBlockData()
     {
@@ -346,9 +339,8 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
         $this->imagesBlockData['border']['padding'] = $this->borderPadding;
     }
 
-
     /**
-     * for 6 images
+     * Arrange up to 6 images
      */
     private function arrangeImages()
     {
@@ -492,6 +484,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
                 $this->calculateImagesWidthsAndHeights4a(0, 1, 2, 3);
                 $this->calculateImagesWidthsAndHeights4a(4, 5, 6, 7);
                 break;
+            default:
         }
     }
 
@@ -558,7 +551,6 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
          * VARIABLES
          * h
          */
-
         $h1 = floor(
             (6 * $p - $t)
             /
@@ -638,7 +630,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * @param int $fileKey3 Index of the third image
      * @param int $fileKey4 Index of the fourth image
      */
-    function calculateImagesWidthsAndHeights4a($fileKey1, $fileKey2, $fileKey3, $fileKey4)
+    public function calculateImagesWidthsAndHeights4a($fileKey1, $fileKey2, $fileKey3, $fileKey4)
     {
         $a = $this->fileObjects[$fileKey1]->getProperty('width') / $this->fileObjects[$fileKey1]->getProperty('height');
         $b = $this->fileObjects[$fileKey2]->getProperty('width') / $this->fileObjects[$fileKey2]->getProperty('height');
@@ -654,7 +646,6 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
          * VARIABLES
          * h
          */
-
         $h1 = floor(
             (8 * $p - $t)
             /

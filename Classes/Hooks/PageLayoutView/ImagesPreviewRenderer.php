@@ -25,12 +25,11 @@ namespace Webenergy\Magstyleimages\Hooks\PageLayoutView;
  * ************************************************************* */
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Backend\View\PageLayoutViewDrawItemHookInterface;
 use TYPO3\CMS\Backend\View\PageLayoutView;
+use TYPO3\CMS\Backend\View\PageLayoutViewDrawItemHookInterface;
 
 /**
  * Contains a preview rendering for the page module of CType="magstyle_images"
- * @package Webenergy\Magstyleimges
  */
 class ImagesPreviewRenderer implements PageLayoutViewDrawItemHookInterface
 {
@@ -42,8 +41,6 @@ class ImagesPreviewRenderer implements PageLayoutViewDrawItemHookInterface
      * @param string $headerContent Header content
      * @param string $itemContent Item content
      * @param array $row Record row of tt_content
-     *
-     * @return void
      */
     public function preProcess(
         PageLayoutView &$parentObject,

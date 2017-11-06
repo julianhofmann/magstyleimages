@@ -33,7 +33,6 @@ use TYPO3\CMS\Lang\LanguageService;
  * Class that adds the wizard icon.
  *
  * @author        Julian Hofmann <julian.hofmann@webenergy.de>
- * @package       Webenergy\Magstyleimges
  */
 class Wizicon
 {
@@ -80,7 +79,6 @@ class Wizicon
         $llFile = ExtensionManagementUtility::extPath('magstyleimages') . 'Resources/Private/Language/locallang.xlf';
         /** @var XliffParser $parser */
         $parser = GeneralUtility::makeInstance(XliffParser::class);
-        $LOCAL_LANG = $parser->getParsedData($llFile, $GLOBALS['LANG']->lang);
-        return $LOCAL_LANG;
+        return $parser->getParsedData($llFile, $GLOBALS['LANG']->lang);
     }
 }
