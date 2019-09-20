@@ -17,4 +17,4 @@
 
 // Register for hook to show preview of tt_content element of CType="magstyleimages_images" in page module
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['tt_content_drawItem']['magstyleimages_images'] =
-   \Webenergy\Magstyleimages\Hooks\PageLayoutView\ImagesPreviewRenderer::class;
+    \Webenergy\Magstyleimages\Hooks\PageLayoutView\ImagesPreviewRenderer::class;

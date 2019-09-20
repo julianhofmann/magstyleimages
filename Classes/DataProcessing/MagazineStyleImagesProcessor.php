@@ -1,11 +1,12 @@
 <?php
+declare(strict_types = 1);
 namespace Webenergy\Magstyleimages\DataProcessing;
 
 /* * *************************************************************
  *  Copyright notice
  *
  *  (c) 2006 Harvey Kane (Original Script) <info@ragepank.com>
-  * (c) 2017 Julian Hofmann <julian.hofmann@webenergy.de>
+  * (c) 2017-2019 Julian Hofmann <julian.hofmann@webenergy.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -55,17 +56,17 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      *
      * @var array
      */
-    protected $availableImagesBlockPositions = [
+    protected static $availableImagesBlockPositions = [
         'horizontal' => [
             'center' => [0, 8],
             'right' => [1, 9, 17, 25],
-            'left' => [2, 10, 18, 26]
+            'left' => [2, 10, 18, 26],
         ],
         'vertical' => [
             'above' => [0, 1, 2],
             'intext' => [17, 18, 25, 26],
-            'below' => [8, 9, 10]
-        ]
+            'below' => [8, 9, 10],
+        ],
     ];
 
     /**
@@ -77,11 +78,11 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
         'position' => [
             'horizontal' => '',
             'vertical' => '',
-            'noWrap' => false
+            'noWrap' => false,
         ],
         'width' => 0,
         'count' => [
-            'files' => 0
+            'files' => 0,
         ],
         'border' => [
             'enabled' => false,
@@ -89,7 +90,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
             'padding' => 0,
         ],
         'images' => [],
-        'profile' => ''
+        'profile' => '',
     ];
 
     /**
@@ -156,7 +157,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData
-    ) {
+    ): array {
         if (isset($processorConfiguration['if.']) && !$cObj->checkIf($processorConfiguration['if.'])) {
             return $processedData;
         }
@@ -206,16 +207,16 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * with when $dataArrayKey fallback to value from cObj->data array
      *
      * @param string $key
-     * @param string|NULL $dataArrayKey
+     * @param string|null $dataArrayKey
      * @return string
      */
-    protected function getConfigurationValue($key, $dataArrayKey = null)
+    protected function getConfigurationValue($key, $dataArrayKey = null): string
     {
         $defaultValue = '';
         if ($dataArrayKey && isset($this->contentObjectRenderer->data[$dataArrayKey])) {
             $defaultValue = $this->contentObjectRenderer->data[$dataArrayKey];
         }
-        return $this->contentObjectRenderer->stdWrapValue(
+        return (string)$this->contentObjectRenderer->stdWrapValue(
             $key,
             $this->processorConfiguration,
             $defaultValue
@@ -228,13 +229,13 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * @param array $fileObjects
      * @return array
      */
-    private function transpose($fileObjects)
+    private function transpose($fileObjects): array
     {
         $newarr = [];
 
         // Currently this extension supports only up to 8 images in a block
-        if (count($fileObjects) > 8) {
-            $fileObjects = array_slice($fileObjects, 0, 8);
+        if (\count($fileObjects) > 8) {
+            $fileObjects = \array_slice($fileObjects, 0, 8);
         }
 
         foreach ($fileObjects as $i => $fileObject) {
@@ -260,9 +261,9 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      */
     protected function determineImagesBlockPosition()
     {
-        foreach ($this->availableImagesBlockPositions as $positionDirectionKey => $positionDirectionValue) {
+        foreach (self::$availableImagesBlockPositions as $positionDirectionKey => $positionDirectionValue) {
             foreach ($positionDirectionValue as $positionKey => $positionArray) {
-                if (in_array($this->mediaOrientation, $positionArray, true)) {
+                if (\in_array($this->mediaOrientation, $positionArray, true)) {
                     $this->imagesBlockData['position'][$positionDirectionKey] = $positionKey;
                 }
             }
@@ -306,10 +307,10 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      *
      * @return int
      */
-    protected function getCroppedDimensionalProperty(FileInterface $fileObject, $dimensionalProperty)
+    protected function getCroppedDimensionalProperty(FileInterface $fileObject, $dimensionalProperty): int
     {
         if (!$fileObject->hasProperty('crop') || empty($fileObject->getProperty('crop'))) {
-            return $fileObject->getProperty($dimensionalProperty);
+            return (int)$fileObject->getProperty($dimensionalProperty);
         }
 
         $croppingConfiguration = $fileObject->getProperty('crop');
@@ -329,8 +330,8 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
                 'media' => $this->fileObjects[$fileKey],
                 'dimensions' => [
                     'width' => $this->mediaDimensions[$fileKey]['width'],
-                    'height' => $this->mediaDimensions[$fileKey]['height']
-                ]
+                    'height' => $this->mediaDimensions[$fileKey]['height'],
+                ],
             ];
         }
 
@@ -494,6 +495,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * These layouts are coded based on the number of images.
      * Some fairly heavy mathematics is used to calculate the image sizes and the excellent calculators at
      * http://www.quickmath.com/ were very useful. Each of these layouts outputs a small piece of HTML code with the images.
+     * @param mixed $fileKey1
      */
 
     /**
@@ -750,7 +752,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
 
         $this->mediaDimensions[$fileKey] = [
             'width' => $mediaWidth,
-            'height' => $mediaHeight
+            'height' => $mediaHeight,
         ];
     }
 }

@@ -1,0 +1,23 @@
+{
+  "name": "julianhofmann/magstyleimages",
+  "license": "proprietary",
+  "type": "typo3-cms-extension",
+  "description": "Magazine Style Images",
+  "require": {
+    "typo3/cms-core": "^8.7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Webenergy\\Magstyleimages\\": "Classes/"
+    }
+  },
+  "replace": {
+    "magstyleimages": "self.version",
+    "typo3-ter/magstyleimages": "self.version"
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "magstyleimages"
+    }
+  }
+}

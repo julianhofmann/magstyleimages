@@ -1,10 +1,11 @@
 <?php
+declare(strict_types = 1);
 namespace Webenergy\Magstyleimages\Hooks\PageLayoutView;
 
 /* * *************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Julian Hofmann <julian.hofmann@webenergy.de>
+ *  (c) 2017-2019 Julian Hofmann <julian.hofmann@webenergy.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -53,7 +54,7 @@ class ImagesPreviewRenderer implements PageLayoutViewDrawItemHookInterface
             if ($row['bodytext']) {
                 $bodytext = $parentObject->renderText($row['bodytext']);
                 $maxLength = 250;
-                $itemContent .= $parentObject->linkEditContent(substr($bodytext, 0, $maxLength), $row) . (strlen($bodytext) > $maxLength ? '...' : '') . '<br />';
+                $itemContent .= $parentObject->linkEditContent(substr($bodytext, 0, $maxLength), $row) . (\strlen($bodytext) > $maxLength ? '...' : '') . '<br />';
             }
 
             if ($row['image']) {

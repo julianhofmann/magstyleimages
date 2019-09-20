@@ -1,10 +1,11 @@
 <?php
+declare(strict_types = 1);
 namespace Webenergy\Magstyleimages;
 
 /* * *************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Julian Hofmann <julian.hofmann@webenergy.de>
+ *  (c) 2017-2019 Julian Hofmann <julian.hofmann@webenergy.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -36,15 +37,14 @@ use TYPO3\CMS\Lang\LanguageService;
  */
 class Wizicon
 {
-
     /**
      * Processing the wizard items array
      *
-     * @param    array $wizardItems : The wizard items
+     * @param array $wizardItems : The wizard items
      *
      * @return    array Modified array with wizard items
      */
-    public function proc($wizardItems)
+    public function proc($wizardItems): array
     {
         $LL = $this->includeLocalLang();
         $wizardItems['plugins_tx_magstyleimages_images'] = [
@@ -53,7 +53,7 @@ class Wizicon
                 ->getLLL('magstyleimages_images.wizard.title', $LL),
             'description' => $this->getLanguage()
                 ->getLLL('magstyleimages_images.wizard.description', $LL),
-            'params' => '&defVals[tt_content][CType]=list&defVals[tt_content][list_type]=magstyleimages_images'
+            'params' => '&defVals[tt_content][CType]=list&defVals[tt_content][list_type]=magstyleimages_images',
         ];
 
         return $wizardItems;
@@ -64,7 +64,7 @@ class Wizicon
      *
      * @return LanguageService
      */
-    protected function getLanguage()
+    protected function getLanguage(): LanguageService
     {
         return $GLOBALS['LANG'];
     }
@@ -74,7 +74,7 @@ class Wizicon
      *
      * @return  array   The array with language labels
      */
-    public function includeLocalLang()
+    public function includeLocalLang(): array
     {
         $llFile = ExtensionManagementUtility::extPath('magstyleimages') . 'Resources/Private/Language/locallang.xlf';
         /** @var XliffParser $parser */

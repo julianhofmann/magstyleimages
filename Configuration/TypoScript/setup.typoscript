@@ -21,13 +21,7 @@ tt_content {
 		}
 	}
 }
-/*
-page.cssInline.234 = TEXT
-page.cssInline.234.value (
-	.msi-blockwrap img { margin: 2px; }
-	.msi-blockwrap img { border: solid 1px #f00; }
-)
-*/
+
 lib.fluidContent {
 	templateRootPaths {
 		23 = EXT:magstyleimages/Resources/Private/Templates/
