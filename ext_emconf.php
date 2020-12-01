@@ -3,7 +3,7 @@ $EM_CONF['magstyleimages'] = [
     'title' => 'Magazine Style Images',
     'description' => 'Implements a new content element "Magazine Images" with very nice looking automatic image layouts for up to eight images.',
     'category' => 'fe',
-    'version' => '1.3.0',
+    'version' => '1.3.1',
     'state' => 'alpha',
     'uploadfolder' => false,
     'createDirs' => '',
@@ -13,7 +13,7 @@ $EM_CONF['magstyleimages'] = [
     'author_company' => '',
     'constraints' => [
         'depends' => [
-            'typo3' => '9.5.0-10.4.99',
+            'typo3' => '9.5.23-10.4.99',
             'fluid_styled_content' => '9.5.0-10.4.99'
         ],
         'conflicts' => [],
