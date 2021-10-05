@@ -4,7 +4,7 @@
   "type": "typo3-cms-extension",
   "description": "Magazine Style Images",
   "require": {
-    "typo3/cms-core": "^9.5.23 || ^10.4.10"
+    "typo3/cms-core": "^9.5.23 || ^10.4.10 || ^11.5.0"
   },
   "autoload": {
     "psr-4": {
