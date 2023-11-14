@@ -1,0 +1,22 @@
+mod {
+  wizards {
+    newContentElement {
+      wizardItems {
+        common {
+          elements {
+            magstyleimages_images {
+              iconIdentifier = ce-magstyleimages
+              title = LLL:EXT:magstyleimages/Resources/Private/Language/locallang.xlf:magstyleimages_images.wizard.title
+              description = LLL:EXT:magstyleimages/Resources/Private/Language/locallang.xlf:magstyleimages_images.wizard.description
+              tt_content_defValues {
+                CType = list
+                list_type = magstyleimages_images
+              }
+            }
+          }
+          show := addToList(magstyleimages_images)
+        }
+      }
+    }
+  }
+}

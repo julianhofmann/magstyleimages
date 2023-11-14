@@ -1,6 +1,9 @@
 <?php
-defined('TYPO3_MODE') || die();
 
-call_user_func(function () {
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile('magstyleimages', 'Configuration/TypoScript/', 'Magazine Style Images');
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+defined('TYPO3') || die();
+
+call_user_func(static function (): void {
+    ExtensionManagementUtility::addStaticFile('magstyleimages', 'Configuration/TypoScript/', 'Magazine Style Images');
 });

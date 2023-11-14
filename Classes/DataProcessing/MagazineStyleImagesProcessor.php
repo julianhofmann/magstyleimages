@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace Webenergy\Magstyleimages\DataProcessing;
 
 /* * *************************************************************
@@ -40,23 +41,23 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
     /**
      * The content object renderer
      *
-     * @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
+     * @var ContentObjectRenderer
      */
-    protected $contentObjectRenderer;
+    protected ContentObjectRenderer $contentObjectRenderer;
 
     /**
      * The processor configuration
      *
      * @var array
      */
-    protected $processorConfiguration;
+    protected array $processorConfiguration = [];
 
     /**
      * Matching the tt_content field towards the imageOrient option
      *
      * @var array
      */
-    protected static $availableImagesBlockPositions = [
+    protected static array $availableImagesBlockPositions = [
         'horizontal' => [
             'center' => [0, 8],
             'right' => [1, 9, 17, 25],
@@ -74,7 +75,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      *
      * @var array
      */
-    protected $imagesBlockData = [
+    protected array $imagesBlockData = [
         'position' => [
             'horizontal' => '',
             'vertical' => '',
@@ -96,56 +97,56 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
     /**
      * @var int
      */
-    protected $mediaOrientation;
+    protected int $mediaOrientation;
 
     /**
      * @var int
      */
-    protected $maxImagesBlockWidth;
+    protected int $maxImagesBlockWidth;
 
     /**
      * @var int
      */
-    protected $maxImagesBlockWidthInText;
+    protected int $maxImagesBlockWidthInText;
 
     /**
      * @var bool
      */
-    protected $borderEnabled;
+    protected bool $borderEnabled;
 
     /**
      * @var int
      */
-    protected $borderWidth;
+    protected int $borderWidth;
 
     /**
      * @var int
      */
-    protected $borderPadding;
+    protected int $borderPadding;
 
     /**
      * @var string
      */
-    protected $cropVariant = 'default';
+    protected string $cropVariant = 'default';
 
     /**
      * The (filtered) image files to be used in the images block
      *
      * @var FileInterface[]
      */
-    protected $fileObjects = [];
+    protected array $fileObjects = [];
 
     /**
      * The calculated dimensions for each image element
      *
      * @var array
      */
-    protected $mediaDimensions = [];
+    protected array $mediaDimensions = [];
 
     /**
      * Process data for a magazine style image block, for instance the CType "textmedia"
      *
-     * @param ContentObjectRenderer $cObj The content object renderer, which contains data of the content element
+     * @param ContentObjectRenderer $contentObjectRenderer The content object renderer, which contains data of the content element
      * @param array $contentObjectConfiguration The configuration of Content Object
      * @param array $processorConfiguration The configuration of this processor
      * @param array $processedData Key/value store of processed data (e.g. to be passed to a Fluid View)
@@ -153,19 +154,19 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * @throws ContentRenderingException
      */
     public function process(
-        ContentObjectRenderer $cObj,
+        ContentObjectRenderer $contentObjectRenderer,
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData
     ): array {
-        if (isset($processorConfiguration['if.']) && !$cObj->checkIf($processorConfiguration['if.'])) {
+        if (isset($processorConfiguration['if.']) && !$contentObjectRenderer->checkIf($processorConfiguration['if.'])) {
             return $processedData;
         }
 
-        $this->contentObjectRenderer = $cObj;
+        $this->contentObjectRenderer = $contentObjectRenderer;
         $this->processorConfiguration = $processorConfiguration;
 
-        $filesProcessedDataKey = (string)$cObj->stdWrapValue(
+        $filesProcessedDataKey = (string)$contentObjectRenderer->stdWrapValue(
             'filesProcessedDataKey',
             $processorConfiguration,
             'files'
@@ -176,6 +177,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
         } else {
             throw new ContentRenderingException('No files found for key ' . $filesProcessedDataKey . ' in $processedData.', 1487542549);
         }
+
         $this->mediaOrientation = (int)$this->getConfigurationValue('mediaOrientation', 'imageorient');
         $this->maxImagesBlockWidth = (int)$this->getConfigurationValue('maxImagesBlockWidth') ?: 600;
         $this->maxImagesBlockWidthInText = (int)$this->getConfigurationValue('maxImagesBlockWidthInText') ?: 300;
@@ -191,7 +193,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
 
         $this->prepareImagesBlockData();
 
-        $targetFieldName = (string)$cObj->stdWrapValue(
+        $targetFieldName = (string)$contentObjectRenderer->stdWrapValue(
             'as',
             $processorConfiguration,
             'imagesBlock'
@@ -206,16 +208,15 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * Get configuration value from processorConfiguration
      * with when $dataArrayKey fallback to value from cObj->data array
      *
-     * @param string $key
-     * @param string|null $dataArrayKey
      * @return string
      */
-    protected function getConfigurationValue($key, $dataArrayKey = null): string
+    protected function getConfigurationValue(string $key, ?string $dataArrayKey = null): string
     {
         $defaultValue = '';
         if ($dataArrayKey && isset($this->contentObjectRenderer->data[$dataArrayKey])) {
             $defaultValue = $this->contentObjectRenderer->data[$dataArrayKey];
         }
+
         return (string)$this->contentObjectRenderer->stdWrapValue(
             $key,
             $this->processorConfiguration,
@@ -226,10 +227,9 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
     /**
      * Transposes the fileObjects into landscape and portrait images. Within each group, the sorting will be kept.
      *
-     * @param array $fileObjects
      * @return array
      */
-    private function transpose($fileObjects): array
+    private function transpose(array $fileObjects): array
     {
         $newarr = [];
 
@@ -242,13 +242,16 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
             if ($fileObject->hasProperty('width') === false || $fileObject->hasProperty('height') === false) {
                 throw new ContentRenderingException($fileObject->getIdentifier() . ' has either no height or no width', 1487544368);
             }
+
             if ($fileObject->getProperty('width') > $fileObject->getProperty('height')) {
                 $i += 100;
             } else {
                 $i += 200;
             }
+
             $newarr[$i] = $fileObject;
         }
+
         ksort($newarr);
         return array_values($newarr);
     }
@@ -259,7 +262,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * Images block has a horizontal and a vertical position towards the text
      * and a possible wrapping of the text around the images block.
      */
-    protected function determineImagesBlockPosition()
+    protected function determineImagesBlockPosition(): void
     {
         foreach (self::$availableImagesBlockPositions as $positionDirectionKey => $positionDirectionValue) {
             foreach ($positionDirectionValue as $positionKey => $positionArray) {
@@ -277,7 +280,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
     /**
      * Get the images block width based on vertical position
      */
-    protected function determineMaximumImagesBlockWidth()
+    protected function determineMaximumImagesBlockWidth(): void
     {
         if ($this->imagesBlockData['position']['vertical'] === 'intext') {
             $this->imagesBlockData['width'] = $this->maxImagesBlockWidthInText;
@@ -289,12 +292,13 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
     /**
      * Profile explains the makeup of the images (landscape vs portrait) so we can use the best layout eg. LPPP or LLLP
      */
-    protected function determineProfile()
+    protected function determineProfile(): void
     {
         $profile = '';
         foreach ($this->fileObjects as $fileObject) {
             $profile .= ($fileObject->getProperty('width') > $fileObject->getProperty('height')) ? 'L' : 'P';
         }
+
         $this->imagesBlockData['profile'] = $profile;
     }
 
@@ -302,20 +306,18 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * When retrieving the height or width for a media file
      * a possible cropping needs to be taken into account.
      *
-     * @param FileInterface $fileObject
      * @param string $dimensionalProperty 'width' or 'height'
-     *
      * @return int
      */
-    protected function getCroppedDimensionalProperty(FileInterface $fileObject, $dimensionalProperty): int
+    protected function getCroppedDimensionalProperty(FileInterface $file, string $dimensionalProperty): int
     {
-        if (!$fileObject->hasProperty('crop') || empty($fileObject->getProperty('crop'))) {
-            return (int)$fileObject->getProperty($dimensionalProperty);
+        if (!$file->hasProperty('crop') || $file->getProperty('crop') === '') {
+            return (int)$file->getProperty($dimensionalProperty);
         }
 
-        $croppingConfiguration = $fileObject->getProperty('crop');
+        $croppingConfiguration = $file->getProperty('crop');
         $cropVariantCollection = CropVariantCollection::create((string)$croppingConfiguration);
-        return (int)$cropVariantCollection->getCropArea($this->cropVariant)->makeAbsoluteBasedOnFile($fileObject)->asArray()[$dimensionalProperty];
+        return (int)$cropVariantCollection->getCropArea($this->cropVariant)->makeAbsoluteBasedOnFile($file)->asArray()[$dimensionalProperty];
     }
 
     /**
@@ -323,9 +325,9 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      *
      * Make an array for rows, columns and configuration
      */
-    protected function prepareImagesBlockData()
+    protected function prepareImagesBlockData(): void
     {
-        foreach ($this->fileObjects as $fileKey => $fileObject) {
+        foreach (array_keys($this->fileObjects) as $fileKey) {
             $this->imagesBlockData['images'][$fileKey] = [
                 'media' => $this->fileObjects[$fileKey],
                 'dimensions' => [
@@ -343,7 +345,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
     /**
      * Arrange up to 6 images
      */
-    private function arrangeImages()
+    private function arrangeImages(): void
     {
         switch ($this->imagesBlockData['profile']) {
             case 'L':
@@ -504,11 +506,11 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      *
      * @param int $fileKey1 Index of the image
      */
-    private function calculateImagesWidthsAndHeights1a($fileKey1)
+    private function calculateImagesWidthsAndHeights1a(int $fileKey1): void
     {
-        $s = floor($this->imagesBlockData['width'] - ($this->borderEnabled ? ($this->borderPadding + $this->borderWidth) : 0));
+        $s = (int)floor($this->imagesBlockData['width'] - ($this->borderEnabled ? ($this->borderPadding + $this->borderWidth) : 0));
 
-        $this->setMediaDimensions($fileKey1, $s, null);
+        $this->setMediaDimensions($fileKey1, $s, 0);
     }
 
     /**
@@ -518,17 +520,17 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * @param int $fileKey1 Index of the first image
      * @param int $fileKey2 Index of the second image
      */
-    private function calculateImagesWidthsAndHeights2a($fileKey1, $fileKey2)
+    private function calculateImagesWidthsAndHeights2a(int $fileKey1, int $fileKey2): void
     {
-        $a = $this->fileObjects[$fileKey1]->getProperty('width') / $this->fileObjects[$fileKey1]->getProperty('height');
-        $b = $this->fileObjects[$fileKey2]->getProperty('width') / $this->fileObjects[$fileKey2]->getProperty('height');
+        $a = (int)$this->fileObjects[$fileKey1]->getProperty('width') / (int)$this->fileObjects[$fileKey1]->getProperty('height');
+        $b =(int)$this->fileObjects[$fileKey2]->getProperty('width') / (int)$this->fileObjects[$fileKey2]->getProperty('height');
         $t = $this->imagesBlockData['width'];
         $p = $this->borderEnabled ? ($this->borderPadding + $this->borderWidth) : 0;
 
-        $h1 = floor((4 * $p - $t) / (-$a - $b));
+        $h1 = (int)floor((4 * $p - $t) / (-$a - $b));
 
-        $this->setMediaDimensions($fileKey1, null, $h1);
-        $this->setMediaDimensions($fileKey2, null, $h1);
+        $this->setMediaDimensions($fileKey1, 0, $h1);
+        $this->setMediaDimensions($fileKey2, 0, $h1);
     }
 
     /**
@@ -538,11 +540,11 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * @param int $fileKey2 Index of the second image
      * @param int $fileKey3 Index of the third image
      */
-    private function calculateImagesWidthsAndHeights3a($fileKey1, $fileKey2, $fileKey3)
+    private function calculateImagesWidthsAndHeights3a(int $fileKey1, int $fileKey2, int $fileKey3): void
     {
-        $a = $this->fileObjects[$fileKey3]->getProperty('width') / $this->fileObjects[$fileKey3]->getProperty('height');
-        $b = $this->fileObjects[$fileKey1]->getProperty('width') / $this->fileObjects[$fileKey1]->getProperty('height');
-        $c = $this->fileObjects[$fileKey2]->getProperty('width') / $this->fileObjects[$fileKey2]->getProperty('height');
+        $a =(int)$this->fileObjects[$fileKey3]->getProperty('width') / (int)$this->fileObjects[$fileKey3]->getProperty('height');
+        $b = (int)$this->fileObjects[$fileKey1]->getProperty('width') / (int)$this->fileObjects[$fileKey1]->getProperty('height');
+        $c = (int)$this->fileObjects[$fileKey2]->getProperty('width') / (int)$this->fileObjects[$fileKey2]->getProperty('height');
         $t = $this->imagesBlockData['width'];
         $p = $this->borderEnabled ? ($this->borderPadding + $this->borderWidth) : 0;
 
@@ -553,15 +555,15 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
          * VARIABLES
          * h
          */
-        $h1 = floor(
+        $h1 = (int)floor(
             (6 * $p - $t)
             /
             (-$a - $b - $c)
         );
 
-        $this->setMediaDimensions($fileKey1, null, $h1);
-        $this->setMediaDimensions($fileKey2, null, $h1);
-        $this->setMediaDimensions($fileKey3, null, $h1);
+        $this->setMediaDimensions($fileKey1, 0, $h1);
+        $this->setMediaDimensions($fileKey2, 0, $h1);
+        $this->setMediaDimensions($fileKey3, 0, $h1);
     }
 
     /**
@@ -572,11 +574,11 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * @param int $fileKey2 Index of the second image
      * @param int $fileKey3 Index of the third image
      */
-    private function calculateImagesWidthsAndHeights3b($fileKey1, $fileKey2, $fileKey3)
+    private function calculateImagesWidthsAndHeights3b(int $fileKey1, int $fileKey2, int $fileKey3): void
     {
-        $a = $this->fileObjects[$fileKey3]->getProperty('width') / $this->fileObjects[$fileKey3]->getProperty('height');
-        $b = $this->fileObjects[$fileKey1]->getProperty('width') / $this->fileObjects[$fileKey1]->getProperty('height');
-        $c = $this->fileObjects[$fileKey2]->getProperty('width') / $this->fileObjects[$fileKey2]->getProperty('height');
+        $a =(int)$this->fileObjects[$fileKey3]->getProperty('width') / (int)$this->fileObjects[$fileKey3]->getProperty('height');
+        $b = (int)$this->fileObjects[$fileKey1]->getProperty('width') / (int)$this->fileObjects[$fileKey1]->getProperty('height');
+        $c = (int)$this->fileObjects[$fileKey2]->getProperty('width') / (int)$this->fileObjects[$fileKey2]->getProperty('height');
         $t = $this->imagesBlockData['width'];
         $p = $this->borderEnabled ? ($this->borderPadding + $this->borderWidth) : 0;
 
@@ -591,7 +593,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
          */
 
         /* column with 2 small images */
-        $w1 = floor(
+        $w1 = (int)floor(
             -(
                 (2 * $a * $b * $c * $p + 4 * $b * $c * $p - $b * $c * $t)
                 /
@@ -600,15 +602,15 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
         );
 
         /* column with 1 large image */
-        $w2 = floor(
+        $w2 = (int)floor(
             ($a * (-4 * $b * $p + 2 * $b * $c * $p - 4 * $c * $p + $b * $t + $c * $t))
             /
             ($a * $b + $c * $b + $a * $c)
         );
 
-        $this->setMediaDimensions($fileKey3, $w2, null);
-        $this->setMediaDimensions($fileKey1, $w1, null);
-        $this->setMediaDimensions($fileKey2, $w1, null);
+        $this->setMediaDimensions($fileKey3, $w2, 0);
+        $this->setMediaDimensions($fileKey1, $w1, 0);
+        $this->setMediaDimensions($fileKey2, $w1, 0);
     }
 
     /**
@@ -619,7 +621,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * @param int $fileKey2 Index of the second image
      * @param int $fileKey3 Index of the third image
      */
-    private function calculateImagesWidthsAndHeights3c($fileKey1, $fileKey2, $fileKey3)
+    private function calculateImagesWidthsAndHeights3c(int $fileKey1, int $fileKey2, int $fileKey3): void
     {
         $this->calculateImagesWidthsAndHeights3b($fileKey1, $fileKey2, $fileKey3);
     }
@@ -632,12 +634,12 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * @param int $fileKey3 Index of the third image
      * @param int $fileKey4 Index of the fourth image
      */
-    public function calculateImagesWidthsAndHeights4a($fileKey1, $fileKey2, $fileKey3, $fileKey4)
+    public function calculateImagesWidthsAndHeights4a(int $fileKey1, int $fileKey2, int $fileKey3, int $fileKey4): void
     {
-        $a = $this->fileObjects[$fileKey1]->getProperty('width') / $this->fileObjects[$fileKey1]->getProperty('height');
-        $b = $this->fileObjects[$fileKey2]->getProperty('width') / $this->fileObjects[$fileKey2]->getProperty('height');
-        $c = $this->fileObjects[$fileKey3]->getProperty('width') / $this->fileObjects[$fileKey3]->getProperty('height');
-        $d = $this->fileObjects[$fileKey4]->getProperty('width') / $this->fileObjects[$fileKey4]->getProperty('height');
+        $a = (int)$this->fileObjects[$fileKey1]->getProperty('width') / (int)$this->fileObjects[$fileKey1]->getProperty('height');
+        $b = (int)$this->fileObjects[$fileKey2]->getProperty('width') / (int)$this->fileObjects[$fileKey2]->getProperty('height');
+        $c =(int)$this->fileObjects[$fileKey3]->getProperty('width') / (int)$this->fileObjects[$fileKey3]->getProperty('height');
+        $d =(int)$this->fileObjects[$fileKey4]->getProperty('width') / (int)$this->fileObjects[$fileKey4]->getProperty('height');
         $t = $this->imagesBlockData['width'];
         $p = $this->borderEnabled ? ($this->borderPadding + $this->borderWidth) : 0;
 
@@ -648,16 +650,16 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
          * VARIABLES
          * h
          */
-        $h1 = floor(
+        $h1 = (int)floor(
             (8 * $p - $t)
             /
             (-$a - $b - $c - $d)
         );
 
-        $this->setMediaDimensions($fileKey1, null, $h1);
-        $this->setMediaDimensions($fileKey2, null, $h1);
-        $this->setMediaDimensions($fileKey3, null, $h1);
-        $this->setMediaDimensions($fileKey4, null, $h1);
+        $this->setMediaDimensions($fileKey1, 0, $h1);
+        $this->setMediaDimensions($fileKey2, 0, $h1);
+        $this->setMediaDimensions($fileKey3, 0, $h1);
+        $this->setMediaDimensions($fileKey4, 0, $h1);
     }
 
     /**
@@ -670,12 +672,12 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * @param int $fileKey3 Index of the third image
      * @param int $fileKey4 Index of the fourth image
      */
-    private function calculateImagesWidthsAndHeights4b($fileKey1, $fileKey2, $fileKey3, $fileKey4)
+    private function calculateImagesWidthsAndHeights4b(int $fileKey1, int $fileKey2, int $fileKey3, int $fileKey4): void
     {
-        $a = $this->fileObjects[$fileKey4]->getProperty('width') / $this->fileObjects[$fileKey4]->getProperty('height');
-        $b = $this->fileObjects[$fileKey1]->getProperty('width') / $this->fileObjects[$fileKey1]->getProperty('height');
-        $c = $this->fileObjects[$fileKey2]->getProperty('width') / $this->fileObjects[$fileKey2]->getProperty('height');
-        $d = $this->fileObjects[$fileKey3]->getProperty('width') / $this->fileObjects[$fileKey3]->getProperty('height');
+        $a = (int)$this->fileObjects[$fileKey4]->getProperty('width') / (int)$this->fileObjects[$fileKey4]->getProperty('height');
+        $b =(int)$this->fileObjects[$fileKey1]->getProperty('width') / (int)$this->fileObjects[$fileKey1]->getProperty('height');
+        $c =(int)$this->fileObjects[$fileKey2]->getProperty('width') / (int)$this->fileObjects[$fileKey2]->getProperty('height');
+        $d = (int)$this->fileObjects[$fileKey3]->getProperty('width') / (int)$this->fileObjects[$fileKey3]->getProperty('height');
         $t = $this->imagesBlockData['width'];
         $p = $this->borderEnabled ? ($this->borderPadding + $this->borderWidth) : 0;
 
@@ -690,7 +692,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
          */
 
         /* column with 3 small images */
-        $w1 = floor(
+        $w1 = (int)floor(
             -(
                 (4 * $a * $b * $c * $d * $p + 4 * $b * $c * $d * $p - $b * $c * $d * $t)
                 /
@@ -699,7 +701,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
         );
 
         /* column with 1 large image */
-        $w2 = floor(
+        $w2 = (int)floor(
             -(
                 (-4 * $p - (-(1 / $c) - (1 / $d) - (1 / $b)) * (4 * $p - $t))
                 /
@@ -707,10 +709,10 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
             )
         );
 
-        $this->setMediaDimensions($fileKey4, $w2, null);
-        $this->setMediaDimensions($fileKey1, $w1, null);
-        $this->setMediaDimensions($fileKey2, $w1, null);
-        $this->setMediaDimensions($fileKey3, $w1, null);
+        $this->setMediaDimensions($fileKey4, $w2, 0);
+        $this->setMediaDimensions($fileKey1, $w1, 0);
+        $this->setMediaDimensions($fileKey2, $w1, 0);
+        $this->setMediaDimensions($fileKey3, $w1, 0);
     }
 
     /**
@@ -723,29 +725,26 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * @param int $fileKey3 Index of the third image
      * @param int $fileKey4 Index of the fourth image
      */
-    private function calculateImagesWidthsAndHeights4c($fileKey1, $fileKey2, $fileKey3, $fileKey4)
+    private function calculateImagesWidthsAndHeights4c(int $fileKey1, int $fileKey2, int $fileKey3, int $fileKey4): void
     {
         $this->calculateImagesWidthsAndHeights4b($fileKey1, $fileKey2, $fileKey3, $fileKey4);
     }
 
     /**
-     * @param int $fileKey
-     * @param int $width
-     * @param int $height
      * @throws ContentRenderingException
      */
-    private function setMediaDimensions($fileKey, $width = 0, $height = 0)
+    private function setMediaDimensions(int $fileKey, int $width = 0, int $height = 0): void
     {
-        if ($width) {
-            $mediaWidth = $width . 'c';
+        if ($width > 0) {
             $mediaHeight = floor(
-                $this->getCroppedDimensionalProperty($this->fileObjects[$fileKey], 'height') * ($mediaWidth / max($this->getCroppedDimensionalProperty($this->fileObjects[$fileKey], 'width'), 1))
+                $this->getCroppedDimensionalProperty($this->fileObjects[$fileKey], 'height') * ($width / max($this->getCroppedDimensionalProperty($this->fileObjects[$fileKey], 'width'), 1))
             );
-        } elseif ($height) {
-            $mediaHeight = $height . 'c';
+            $mediaWidth = $width . 'c';
+        } elseif ($height > 0) {
             $mediaWidth = floor(
-                $this->getCroppedDimensionalProperty($this->fileObjects[$fileKey], 'width') * ($mediaHeight / max($this->getCroppedDimensionalProperty($this->fileObjects[$fileKey], 'height'), 1))
+                $this->getCroppedDimensionalProperty($this->fileObjects[$fileKey], 'width') * ($height / max($this->getCroppedDimensionalProperty($this->fileObjects[$fileKey], 'height'), 1))
             );
+            $mediaHeight = $height . 'c';
         } else {
             throw new ContentRenderingException('Neither a width nor a height are set for image with index ' . $fileKey . '.', 1487580086);
         }
