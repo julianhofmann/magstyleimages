@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace Webenergy\Magstyleimages\Hooks\PageLayoutView;
 
 /* * *************************************************************
@@ -37,45 +38,48 @@ class ImagesPreviewRenderer implements PageLayoutViewDrawItemHookInterface
     /**
      * Preprocesses the preview rendering of a content element of type "Magazine Style Images"
      *
-     * @param \TYPO3\CMS\Backend\View\PageLayoutView $parentObject Calling parent object
+     * @param \TYPO3\CMS\Backend\View\PageLayoutView $pageLayoutView Calling parent object
      * @param bool $drawItem Whether to draw the item using the default functionality
      * @param string $headerContent Header content
      * @param string $itemContent Item content
      * @param array $row Record row of tt_content
      */
     public function preProcess(
-        PageLayoutView &$parentObject,
+        PageLayoutView &$pageLayoutView,
         &$drawItem,
         &$headerContent,
         &$itemContent,
         array &$row
-    ) {
+    ): void {
         if ($row['CType'] === 'magstyleimages_images') {
             if ($row['bodytext']) {
-                $bodytext = $parentObject->renderText($row['bodytext']);
+                $bodytext = $pageLayoutView->renderText($row['bodytext']);
                 $maxLength = 250;
-                $itemContent .= $parentObject->linkEditContent(substr($bodytext, 0, $maxLength), $row) . (\strlen($bodytext) > $maxLength ? '...' : '') . '<br />';
+                $itemContent .= $pageLayoutView->linkEditContent(substr((string)$bodytext, 0, $maxLength), $row) . (\strlen((string)$bodytext) > $maxLength ? '...' : '') . '<br />';
             }
 
             if ($row['image']) {
-                $itemContent .= $parentObject->linkEditContent($parentObject->getThumbCodeUnlinked($row, 'tt_content', 'image'), $row) . '<br />';
+                $itemContent .= $pageLayoutView->linkEditContent($pageLayoutView->getThumbCodeUnlinked($row, 'tt_content', 'image'), $row) . '<br />';
 
                 $fileReferences = BackendUtility::resolveFileReferences('tt_content', 'image', $row);
 
-                if (!empty($fileReferences)) {
+                if ($fileReferences !== null && $fileReferences !== []) {
                     $linkedContent = '';
 
                     foreach ($fileReferences as $fileReference) {
-                        if ($fileReference->getDescription()) {
-                            $linkedContent .= htmlspecialchars($fileReference->getDescription()) . '<br />';
+                        if ($fileReference->getDescription() !== '' && $fileReference->getDescription() !== '0') {
+                            $linkedContent .= htmlspecialchars((string)$fileReference->getDescription()) . '<br />';
                         }
                     }
-                    if ($linkedContent) {
-                        $itemContent .= $parentObject->linkEditContent($linkedContent, $row);
+
+                    if ($linkedContent !== '' && $linkedContent !== '0') {
+                        $itemContent .= $pageLayoutView->linkEditContent($linkedContent, $row);
                     }
+
                     unset($linkedContent);
                 }
             }
+
             $drawItem = false;
         }
     }

@@ -1,9 +1,14 @@
 <?php
-defined('TYPO3_MODE') || die();
 
-call_user_func(function () {
+use TYPO3\CMS\Core\Http\ApplicationType;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use Webenergy\Magstyleimages\Wizicon;
+
+defined('TYPO3') || die();
+
+call_user_func(static function (): void {
     // Adds the content element to the "Type" dropdown
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
+    ExtensionManagementUtility::addPlugin(
         [
             'LLL:EXT:magstyleimages/Resources/Private/Language/locallang.xlf:magstyleimages_images.title',
             'magstyleimages_images',
@@ -17,8 +22,4 @@ call_user_func(function () {
     $GLOBALS['TCA']['tt_content']['types']['magstyleimages_images']['columnsOverrides'] = $GLOBALS['TCA']['tt_content']['types']['textpic']['columnsOverrides'];
     $GLOBALS['TCA']['tt_content']['types']['magstyleimages_images']['columnsOverrides']['image']['config']['maxitems'] = 8;
     $GLOBALS['TCA']['tt_content']['types']['magstyleimages_images']['columnsOverrides']['image']['config']['minitems'] = 1;
-
-    if (TYPO3_MODE === 'BE') {
-        $GLOBALS['TBE_MODULES_EXT']['xMOD_db_new_content_el']['addElClasses'][\Webenergy\Magstyleimages\Wizicon::class] = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('magstyleimages') . 'Classes/Wizicon.php';
-    }
 });
