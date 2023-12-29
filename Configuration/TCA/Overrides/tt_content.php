@@ -1,8 +1,7 @@
 <?php
 
-use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use Webenergy\Magstyleimages\Wizicon;
+use Webenergy\Magstyleimages\Preview\MsiPreviewRenderer;
 
 defined('TYPO3') || die();
 
@@ -22,4 +21,7 @@ call_user_func(static function (): void {
     $GLOBALS['TCA']['tt_content']['types']['magstyleimages_images']['columnsOverrides'] = $GLOBALS['TCA']['tt_content']['types']['textpic']['columnsOverrides'];
     $GLOBALS['TCA']['tt_content']['types']['magstyleimages_images']['columnsOverrides']['image']['config']['maxitems'] = 8;
     $GLOBALS['TCA']['tt_content']['types']['magstyleimages_images']['columnsOverrides']['image']['config']['minitems'] = 1;
+
+    $GLOBALS['TCA']['tt_content']['types']['magstyleimages_images']['previewRenderer']
+        = MsiPreviewRenderer::class;
 });
