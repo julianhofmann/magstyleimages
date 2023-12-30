@@ -30,11 +30,3 @@ lib.contentElement {
 		23 = EXT:magstyleimages/Resources/Private/Partials/
 	}
 }
-lib.contentElement {
-	templateRootPaths {
-		23 = EXT:magstyleimages/Resources/Private/Templates/
-	}
-	partialRootPaths {
-		23 = EXT:magstyleimages/Resources/Private/Partials/
-	}
-}
