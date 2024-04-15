@@ -18,7 +18,11 @@ call_user_func(static function (): void {
     );
     // use the $GLOBALS['TCA'] definition from textpic
     $GLOBALS['TCA']['tt_content']['types']['magstyleimages_images']['showitem'] = $GLOBALS['TCA']['tt_content']['types']['textpic']['showitem'];
-    $GLOBALS['TCA']['tt_content']['types']['magstyleimages_images']['columnsOverrides'] = $GLOBALS['TCA']['tt_content']['types']['textpic']['columnsOverrides'];
+    $GLOBALS['TCA']['tt_content']['types']['magstyleimages_images']['columnsOverrides'] ??= [];
+    $GLOBALS['TCA']['tt_content']['types']['magstyleimages_images']['columnsOverrides'] = array_merge_recursive(
+        $GLOBALS['TCA']['tt_content']['types']['textpic']['columnsOverrides'],
+        $GLOBALS['TCA']['tt_content']['types']['magstyleimages_images']['columnsOverrides']
+    );
     $GLOBALS['TCA']['tt_content']['types']['magstyleimages_images']['columnsOverrides']['image']['config']['maxitems'] = 8;
     $GLOBALS['TCA']['tt_content']['types']['magstyleimages_images']['columnsOverrides']['image']['config']['minitems'] = 1;
 
