@@ -1,16 +1,23 @@
-<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:ce="http://typo3.org/ns/TYPO3/CMS/FluidStyledContent/ViewHelpers"
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:ce="http://typo3.org/ns/TYPO3/CMS/FluidStyledContent/ViewHelpers"
+      xmlns:msi="http://typo3.org/ns/Webenergy/Magstyleimages/ViewHelpers"
       data-namespace-typo3-fluid="true">
 <div class="ce-gallery msi-blockwrap msi-blockwrap-{imagesBlock.position.horizontal}{f:if(condition: data.imageborder, then: ' ce-border')}" data-ce-images="{imagesBlock.count.files}">
+
+	<f:variable name="firstMedia">{imagesBlock.images.0.media}</f:variable>
+	<f:variable name="ratio">{f:if(condition: '{firstMedia.properties.width} > {firstMedia.properties.height}', then: '{firstMedia.properties.width/firstMedia.properties.height}', else: '{firstMedia.properties.height/firstMedia.properties.width}')}</f:variable>
+	<f:variable name="ratio"><msi:math.round>{ratio*100}</msi:math.round></f:variable>
+
 	<f:if condition="{imagesBlock.position.horizontal} == 'center'">
 		<f:then>
 			<div class="ce-outer">
-				<div class="ce-inner msi-{imagesBlock.profile -> f:format.case(mode:'lower')}">
+				<div class="ce-inner msi-{imagesBlock.profile -> f:format.case(mode:'lower')} msi-{ratio}">
 					<f:render partial="Images/MagStyleImages/{imagesBlock.profile}" arguments="{imagesBlock: imagesBlock, data:data, settings:settings}"/>
 				</div>
 			</div>
 		</f:then>
 		<f:else>
-			<div class="msi-{imagesBlock.profile -> f:format.case(mode:'lower')}">
+			<div class="msi-{imagesBlock.profile -> f:format.case(mode:'lower')} msi-{ratio}">
 				<f:render partial="Images/MagStyleImages/{imagesBlock.profile}" arguments="{imagesBlock: imagesBlock, data:data, settings:settings}"/>
 			</div>
 		</f:else>
