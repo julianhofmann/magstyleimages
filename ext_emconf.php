@@ -11,8 +11,8 @@ $EM_CONF['magstyleimages'] = [
     'author_company' => '',
     'constraints' => [
         'depends' => [
-            'typo3' => '12.3.0-12.4.99',
-            'fluid_styled_content' => '11.5.99-12.4.99',
+            'typo3' => '13.0.0-13.99.99',
+            'fluid_styled_content' => '11.5.99-13.99.99',
         ],
         'conflicts' => [],
         'suggests' => [],
