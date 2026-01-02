@@ -29,6 +29,8 @@ namespace Webenergy\Magstyleimages\Preview;
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
+use TYPO3\CMS\Core\Domain\RecordFactory;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Contains a preview rendering for the page module of CType="magstyle_images"
@@ -36,23 +38,25 @@ use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
 class MsiPreviewRenderer extends StandardContentPreviewRenderer
 {
     /**
-     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings("PHPMD.Superglobals")
      */
-    public function renderPageModulePreviewContent(GridColumnItem $gridColumnItem): string
+    #[\Override]
+    public function renderPageModulePreviewContent(GridColumnItem $item): string
     {
         $itemContent = '';
-        $row = $gridColumnItem->getRecord();
+        $record = $item->getRecord();
+        $recordObj = GeneralUtility::makeInstance(RecordFactory::class)->createResolvedRecordFromDatabaseRow('tt_content', $record);
 
-        if ($row['bodytext']) {
-            $bodytext = $this->renderText($row['bodytext']);
+        if ($record['bodytext']) {
+            $bodytext = $this->renderText($record['bodytext']);
             $maxLength = 250;
-            $itemContent .= $this->linkEditContent(substr((string)$bodytext, 0, $maxLength), $row) . (\strlen((string)$bodytext) > $maxLength ? '...' : '') . '<br />';
+            $itemContent .= $this->linkEditContent(substr((string)$bodytext, 0, $maxLength), $record) . (\strlen((string)$bodytext) > $maxLength ? '...' : '') . '<br />';
         }
 
-        if ($row['image']) {
-            $itemContent .= $this->linkEditContent($this->getThumbCodeUnlinked($row, 'tt_content', 'image'), $row) . '<br />';
+        if ($recordObj->has('image') && ($image = $recordObj->get('image'))) {
+            $itemContent .= $this->linkEditContent($this->getThumbCodeUnlinked($image), $record) . '<br />';
 
-            $fileReferences = BackendUtility::resolveFileReferences('tt_content', 'image', $row);
+            $fileReferences = BackendUtility::resolveFileReferences('tt_content', 'image', $record);
 
             if ($fileReferences !== null && $fileReferences !== []) {
                 $linkedContent = '';
@@ -64,7 +68,7 @@ class MsiPreviewRenderer extends StandardContentPreviewRenderer
                 }
 
                 if (!in_array($linkedContent, ['', '0'])) {
-                    $itemContent .= $this->linkEditContent($linkedContent, $row);
+                    $itemContent .= $this->linkEditContent($linkedContent, $record);
                 }
 
                 unset($linkedContent);

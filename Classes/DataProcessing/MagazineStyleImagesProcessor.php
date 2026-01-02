@@ -153,6 +153,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * @return array the processed data as key/value store
      * @throws ContentRenderingException
      */
+    #[\Override]
     public function process(
         ContentObjectRenderer $contentObjectRenderer,
         array $contentObjectConfiguration,
@@ -307,6 +308,7 @@ class MagazineStyleImagesProcessor implements DataProcessorInterface
      * a possible cropping needs to be taken into account.
      *
      * @param string $dimensionalProperty 'width' or 'height'
+     * @phpstan-param non-empty-string $dimensionalProperty
      * @return int
      */
     protected function getCroppedDimensionalProperty(FileInterface $file, string $dimensionalProperty): int

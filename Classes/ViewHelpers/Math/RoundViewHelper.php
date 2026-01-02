@@ -26,29 +26,29 @@ class RoundViewHelper extends AbstractViewHelper
     }
 
     /**
-     * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings("PHPMD.UnusedFormalParameter")
      */
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
-    ) {
+    ): float|int {
         $value = $renderChildrenClosure();
         return static::calculateAction($value, $arguments);
     }
 
     /**
-     * @param float|integer|string|iterable|array $value
-     * @return float|array
+     * @param float|int|string|iterable|array $value
+     * @param array $arguments
+     * @return int|float
      */
-    protected static function calculateAction($value, array $arguments = [])
+    protected static function calculateAction($value, array $arguments = []): int|float
     {
         if (!is_scalar($value)) {
             return 0;
         }
-        /** @var integer|float $a */
-        return round($value, $arguments['decimals']);
+
+        /** @var int|float|string $value */
+        return round((float)$value, $arguments['decimals']);
     }
 }
